@@ -256,8 +256,8 @@ void nicola_om_type(void) {
             case NG_J   : send_string("do"); break;
             case NG_K   : send_string("gi"); break;
             case NG_L   : send_string("po"); break;
-            case NG_SCLN:                    break;
-            case NG_QUOT:                    break;
+            case NG_SCLN: send_string(":");  break; 
+            case NG_QUOT: send_string(";");  break; // ：は左親指+'のほうがぼく的には合っている？
 
             case NG_Z   : send_string("xu"); break;
             case NG_X   : send_string("-" ); break;
@@ -268,7 +268,7 @@ void nicola_om_type(void) {
             case NG_M   : send_string("zo"); break;
             case NG_COMM: send_string("pe"); break;
             case NG_DOT : send_string("bo"); break;
-            case NG_SLSH:                    break;
+            case NG_SLSH: send_string("xwa"); break;     // ゎ
         }
     } else if(nicola_o_key == NG_SHFTR) {
         switch(nicola_m_key) {
