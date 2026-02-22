@@ -170,8 +170,8 @@ void nicola_m_type(void) {
             case NG_U   : send_string("ti"); break;
             case NG_I   : send_string("ku"); break;
             case NG_O   : send_string("tu"); break;
-            case NG_P   : send_string(",");  break;     // カンマと読点も区別できない
-            case NG_LBRC: send_string("[");  break;     // [
+            case NG_P   : send_string("wye");  break;     // カンマと読点も区別できない   ゑ
+            case NG_LBRC: send_string(",");  break;     // [  読点はこっち
             case NG_RBRC: send_string("]");  break;     // ]
             case NG_BSLS: send_string("\\"); break;     // 円記号"\"を送る
 
@@ -203,15 +203,19 @@ void nicola_m_type(void) {
 
 void nicola_o_type(void) {
     if(nicola_o_key == NG_SHFTL) {
-        send_string(SS_TAP(X_F14));         // 左親指キーはWin MS-IME で無変換キー
+        // send_string(SS_TAP(X_F14));         // 左親指キーはWin MS-IME で無変換キー
+        send_string(SS_TAP(X_SPACE));       // 右親指キーは単独打鍵で空白キー 左に変更
     } else if(nicola_o_key == NG_SHFTR) {
-        send_string(SS_TAP(X_SPACE));       // 右親指キーは単独打鍵で空白キー
+        send_string(SS_TAP(X_LNG1));         // 左親指キーは日本語入力OFFに変更
+//        send_string(SS_TAP(X_F14));         // 左親指キーはWin MS-IME で無変換キー 右に変更したけど、なにも変わらず？
+        // send_string(SS_TAP(X_SPACE));       // 右親指キーは単独打鍵で空白キー
     }
 }
 
 void nicola_o_TO_type(void) {
     if(nicola_o_key == NG_SHFTL) {
-        send_string(SS_TAP(X_TAB));         // タイムアウト時はTAB(変換候補選択)キー
+//     send_string(SS_TAP(X_F15));     // Win
+     send_string(SS_TAP(X_LNG2));     // Mac（日本語OFF）
     } else if(nicola_o_key == NG_SHFTR) {
         send_string(SS_TAP(X_F15));         // タイムアウト時はF15(変換)キー
     }
@@ -272,7 +276,7 @@ void nicola_om_type(void) {
         }
     } else if(nicola_o_key == NG_SHFTR) {
         switch(nicola_m_key) {
-            case NG_1   : send_string("?"); break;      // ？
+            case NG_1   : send_string("!"); break;      // ！
             case NG_2   : send_string("/"); break;      // ・
             case NG_3   : send_string("~"); break;      // ～
             case NG_4   : send_string("["); break;      // 「
