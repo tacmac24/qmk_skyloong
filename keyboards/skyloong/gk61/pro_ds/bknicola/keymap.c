@@ -63,6 +63,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
+// KC_RALTのところに日本語ONを入れたい
+
 void matrix_init_user(void) {
     // NICOLA親指シフト
     set_nicola(_NICOLA);

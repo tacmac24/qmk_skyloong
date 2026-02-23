@@ -172,7 +172,7 @@ void nicola_m_type(void) {
             case NG_O   : send_string("tu"); break;
             case NG_P   : send_string("wye");  break;     // カンマと読点も区別できない   ゑ
             case NG_LBRC: send_string(",");  break;     // [  読点はこっち
-            case NG_RBRC: send_string("]");  break;     // ]
+            case NG_RBRC: send_string("{}");  break;     // ]
             case NG_BSLS: send_string("\\"); break;     // 円記号"\"を送る
 
             case NG_A   : send_string("u" ); break;
@@ -185,7 +185,7 @@ void nicola_m_type(void) {
             case NG_K   : send_string("ki"); break;
             case NG_L   : send_string("i" ); break;
             case NG_SCLN: send_string("nn"); break;
-            case NG_QUOT:                  ; break;
+            case NG_QUOT:                  ; break;         // 古賀さん用に、ここにバックスペースBSPCを
 
             case NG_Z   : send_string("." ); break;     //ピリオドと句点は区別できない
             case NG_X   : send_string("hi"); break;
@@ -283,9 +283,9 @@ void nicola_om_type(void) {
             case NG_5   : send_string("]"); break;      // 」
             case NG_6   : send_string("{"); break;      // 『
             case NG_7   : send_string("}"); break;      // 』
-            case NG_8   : send_string("*"); break;      // ＊
-            case NG_9   : send_string("("); break;      // （
-            case NG_0   : send_string(")"); break;      // ）
+            case NG_8   : send_string("("); break;      // （
+            case NG_9   : send_string(")"); break;      // ）
+            case NG_0   : send_string("*"); break;      // ＊
             case NG_MINS: send_string("_"); break;      // ＿
             case NG_EQL : send_string("+"); break;      // ＋
 

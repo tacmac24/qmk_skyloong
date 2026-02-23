@@ -185,7 +185,7 @@ void nicola_m_type(void) {
             case NG_K   : send_string("ki"); break;
             case NG_L   : send_string("i" ); break;
             case NG_SCLN: send_string("nn"); break;
-            case NG_QUOT:                  ; break;
+            case NG_QUOT:                  ; break;        // ここにBSPCを入れたい。どうするんだ？
 
             case NG_Z   : send_string("." ); break;     //ピリオドと句点は区別できない
             case NG_X   : send_string("hi"); break;
