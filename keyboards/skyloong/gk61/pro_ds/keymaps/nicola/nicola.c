@@ -198,7 +198,8 @@ void nicola_m_type(void) {
             case NG_M   : send_string("so"); break;
             case NG_COMM: send_string("ne"); break;
             case NG_DOT : send_string("ho"); break;
-            case NG_SLSH: send_string("/" ); break;
+            case NG_SLSH   : send_string("zx"); send_string(SS_TAP(X_SPACE)); break;      // 
+//            case NG_SLSH: send_string("/" ); break;
         }
     }
 }
@@ -295,8 +296,10 @@ void nicola_om_type(void) {
             case NG_8   : send_string("("); break;      // （
             case NG_9   : send_string(")"); break;      // ）
             case NG_0   : send_string("*"); break;      // ＊
-            case NG_MINS: send_string("_"); break;      // ＿
-            case NG_EQL : send_string("+"); break;      // ＋
+//            case NG_MINS: send_string("_"); break;      // ＿
+            case NG_MINS   : send_string("zr"); send_string(SS_TAP(X_SPACE)); break;      // ……
+//            case NG_EQL : send_string("+"); break;      // ＋
+            case NG_EQL   : send_string("zt"); send_string(SS_TAP(X_SPACE)); break;      // ※
 
             case NG_Q   : send_string("wyi"); break;
             case NG_W   : send_string("ga"); break;
@@ -310,7 +313,7 @@ void nicola_om_type(void) {
             case NG_P   : send_string("xe"); break;
             case NG_LBRC: send_string("zq" ); send_string(SS_TAP(X_SPACE)); break;     // ●
             case NG_RBRC: send_string("zw" ); send_string(SS_TAP(X_SPACE)); break;     // ○
-            case NG_BSLS   : send_string("zr"); send_string(SS_TAP(X_SPACE)); break;      // ……
+            case NG_BSLS   : send_string("zg"); send_string(SS_TAP(X_SPACE)); break;      // 住所
 //            case NG_LBRC: send_string("{" ); break;     // {
 //            case NG_RBRC: send_string("}" ); break;     // }
 //            case NG_BSLS: send_string("|" ); break;
