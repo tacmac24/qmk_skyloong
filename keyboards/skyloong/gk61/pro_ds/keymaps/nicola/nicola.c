@@ -264,8 +264,8 @@ void nicola_om_type(void) {
             case NG_J   : send_string("do"); break;
             case NG_K   : send_string("gi"); break;
             case NG_L   : send_string("po"); break;
-            case NG_SCLN:                    break;
-            case NG_QUOT:                    break;
+            case NG_SCLN: send_string("zs"); send_string(SS_TAP(X_SPACE)); break;
+            case NG_QUOT: send_string("zn"); send_string(SS_TAP(X_SPACE)); break;
 
             case NG_Z   : send_string("xu"); break;
             case NG_X   : send_string("-" ); break;
@@ -328,7 +328,7 @@ void nicola_om_type(void) {
             case NG_K   : send_string("no"); break;
             case NG_L   : send_string("xyo");break;
             case NG_SCLN: send_string("xtu");break;
-            case NG_QUOT:                    break;
+            case NG_QUOT   : send_string("zv"); send_string(SS_TAP(X_SPACE)); break;      // 
 
             case NG_Z   : send_string("wye"); break;
             case NG_X   : send_string("bi"); break;
