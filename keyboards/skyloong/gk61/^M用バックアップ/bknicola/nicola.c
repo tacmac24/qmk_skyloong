@@ -170,9 +170,9 @@ void nicola_m_type(void) {
             case NG_U   : send_string("ti"); break;
             case NG_I   : send_string("ku"); break;
             case NG_O   : send_string("tu"); break;
-            case NG_P   : send_string(","); send_string(SS_TAP(X_F9)); break;      // ，
-            case NG_LBRC: send_string(",");  break;     // [  読点はこっち
-            case NG_RBRC: send_string("{}");  break;     // ]
+            case NG_P   : send_string(",");  break;     // カンマと読点も区別できない
+            case NG_LBRC: send_string("[");  break;     // [
+            case NG_RBRC: send_string("]");  break;     // ]
             case NG_BSLS: send_string("\\"); break;     // 円記号"\"を送る
 
             case NG_A   : send_string("u" ); break;
@@ -185,11 +185,9 @@ void nicola_m_type(void) {
             case NG_K   : send_string("ki"); break;
             case NG_L   : send_string("i" ); break;
             case NG_SCLN: send_string("nn"); break;
-//            case NG_QUOT:                  ; break;         
-            case NG_QUOT: tap_code(KC_BSPC); break;  // 古賀さん用、バックスペース
+            case NG_QUOT:                  ; break;        // ここにBSPCを入れたい。どうするんだ？
 
-            case NG_Z   : send_string("."); send_string(SS_TAP(X_F9)); break;      // ／
-           //ピリオドと句点は区別できないはずだが、区別できるようになった
+            case NG_Z   : send_string("." ); break;     //ピリオドと句点は区別できない
             case NG_X   : send_string("hi"); break;
             case NG_C   : send_string("su"); break;
             case NG_V   : send_string("hu"); break;
@@ -198,28 +196,22 @@ void nicola_m_type(void) {
             case NG_M   : send_string("so"); break;
             case NG_COMM: send_string("ne"); break;
             case NG_DOT : send_string("ho"); break;
-            case NG_SLSH: tap_code(KC_UP); break;  // 
-//            case NG_SLSH   : send_string("zx"); send_string(SS_TAP(X_SPACE)); break;      // 
-//            case NG_SLSH: send_string("/" ); break;
+            case NG_SLSH: send_string("/" ); break;
         }
     }
 }
 
 void nicola_o_type(void) {
     if(nicola_o_key == NG_SHFTL) {
-        // send_string(SS_TAP(X_F14));         // 左親指キーはWin MS-IME で無変換キー
-        send_string(SS_TAP(X_SPACE));       // 右親指キーは単独打鍵で空白キー 左に変更
+        send_string(SS_TAP(X_F14));         // 左親指キーはWin MS-IME で無変換キー
     } else if(nicola_o_key == NG_SHFTR) {
-        send_string(SS_TAP(X_LNG1));         // 左親指キーは日本語入力OFFに変更
-//        send_string(SS_TAP(X_F14));         // 左親指キーはWin MS-IME で無変換キー 右に変更したけど、なにも変わらず？
-        // send_string(SS_TAP(X_SPACE));       // 右親指キーは単独打鍵で空白キー
+        send_string(SS_TAP(X_SPACE));       // 右親指キーは単独打鍵で空白キー
     }
 }
 
 void nicola_o_TO_type(void) {
     if(nicola_o_key == NG_SHFTL) {
-//     send_string(SS_TAP(X_F15));     // Win
-     send_string(SS_TAP(X_LNG2));     // Mac（日本語OFF）
+        send_string(SS_TAP(X_TAB));         // タイムアウト時はTAB(変換候補選択)キー
     } else if(nicola_o_key == NG_SHFTR) {
         send_string(SS_TAP(X_F15));         // タイムアウト時はF15(変換)キー
     }
@@ -228,19 +220,18 @@ void nicola_o_TO_type(void) {
 void nicola_om_type(void) {
     if(nicola_o_key == NG_SHFTL) {
         switch(nicola_m_key) {
-            case NG_1   : send_string("?"); break;      // ？
-            case NG_2   : send_string("/"); break;      // ／
-            case NG_3   : send_string("~"); break;      // ～
+            case NG_1   : send_string("?"); send_string(SS_TAP(X_F9)); break;      // ？
+            case NG_2   : send_string("/"); send_string(SS_TAP(X_F9)); break;      // ／
+            case NG_3   : send_string("~"); send_string(SS_TAP(X_F9)); break;      // ～
             case NG_4   : send_string("["); break;      // 「
             case NG_5   : send_string("]"); break;      // 」
-
-            case NG_6: tap_code(KC_END); break;  // 
-            case NG_7: tap_code(KC_UP); break;  // 
-            case NG_8: tap_code(KC_DOWN); break;  // 
-            case NG_9: tap_code(KC_LEFT); break;  // 
-            case NG_0: tap_code(KC_RIGHT); break;  // 
-            case NG_MINS: tap_code(KC_PGUP); break;  // 
-            case NG_EQL : tap_code(KC_PGDN); break;  // 
+            case NG_6   : send_string("{"); break;      // 『
+            case NG_7   : send_string("}"); break;      // 』
+            case NG_8   : send_string("*"); break;      // ＊
+            case NG_9   : send_string("("); break;      // （
+            case NG_0   : send_string(")"); break;      // ）
+            case NG_MINS: send_string("_"); break;      // ＿
+            case NG_EQL : send_string("+"); break;      // ＋
 
             case NG_Q   : send_string("xa"); break;
             case NG_W   : send_string("e" ); break;
@@ -265,8 +256,8 @@ void nicola_om_type(void) {
             case NG_J   : send_string("do"); break;
             case NG_K   : send_string("gi"); break;
             case NG_L   : send_string("po"); break;
-            case NG_SCLN: send_string("zs"); send_string(SS_TAP(X_SPACE)); break;
-            case NG_QUOT: send_string("zx"); send_string(SS_TAP(X_SPACE)); break;
+            case NG_SCLN: send_string(":");  break; 
+            case NG_QUOT: send_string(";");  break; // ：は左親指+'のほうがぼく的には合っている？
 
             case NG_Z   : send_string("xu"); break;
             case NG_X   : send_string("-" ); break;
@@ -277,32 +268,24 @@ void nicola_om_type(void) {
             case NG_M   : send_string("zo"); break;
             case NG_COMM: send_string("pe"); break;
             case NG_DOT : send_string("bo"); break;
-            case NG_SLSH:send_string("xwa");break;
+            case NG_SLSH: send_string("xwa"); break;     // ゎ
         }
     } else if(nicola_o_key == NG_SHFTR) {
         switch(nicola_m_key) {
-            case NG_1   : send_string("!"); break;      // ！
-            case NG_2   : send_string("/"); send_string(SS_TAP(X_F9)); break;      // ／・
-
-            case NG_3: tap_code(KC_BSPC); break;  // BS
-            case NG_4: tap_code(KC_ENT); break;  // 
-            case NG_5: tap_code(KC_HOME); break;  // 
-
-//            case NG_3   : send_string("~"); break;      // ～
-//            case NG_4   : send_string("["); break;      // 「
-//            case NG_5   : send_string("]"); break;      // 」
-
+            case NG_1   : send_string("?"); break;      // ？
+            case NG_2   : send_string("/"); break;      // ・
+            case NG_3   : send_string("~"); break;      // ～
+            case NG_4   : send_string("["); break;      // 「
+            case NG_5   : send_string("]"); break;      // 」
             case NG_6   : send_string("{"); break;      // 『
             case NG_7   : send_string("}"); break;      // 』
-            case NG_8   : send_string("("); break;      // （
-            case NG_9   : send_string(")"); break;      // ）
-            case NG_0   : send_string("*"); break;      // ＊
-//            case NG_MINS: send_string("_"); break;      // ＿
-            case NG_MINS   : send_string("zr"); send_string(SS_TAP(X_SPACE)); break;      // ……
-//            case NG_EQL : send_string("+"); break;      // ＋
-            case NG_EQL   : send_string("zt"); send_string(SS_TAP(X_SPACE)); break;      // ※
+            case NG_8   : send_string("*"); break;      // ＊
+            case NG_9   : send_string("("); break;      // （
+            case NG_0   : send_string(")"); break;      // ）
+            case NG_MINS: send_string("_"); break;      // ＿
+            case NG_EQL : send_string("+"); break;      // ＋
 
-            case NG_Q   : send_string("wyi"); break;
+            case NG_Q   :                    break;
             case NG_W   : send_string("ga"); break;
             case NG_E   : send_string("da"); break;
             case NG_R   : send_string("go"); break;
@@ -312,12 +295,9 @@ void nicola_om_type(void) {
             case NG_I   : send_string("ru"); break;
             case NG_O   : send_string("ma"); break;
             case NG_P   : send_string("xe"); break;
-            case NG_LBRC: send_string("zq" ); send_string(SS_TAP(X_SPACE)); break;     // ●
-            case NG_RBRC: send_string("zw" ); send_string(SS_TAP(X_SPACE)); break;     // ○
-            case NG_BSLS   : send_string("zg"); send_string(SS_TAP(X_SPACE)); break;      // 住所
-//            case NG_LBRC: send_string("{" ); break;     // {
-//            case NG_RBRC: send_string("}" ); break;     // }
-//            case NG_BSLS: send_string("|" ); break;
+            case NG_LBRC: send_string("{" ); break;     // {
+            case NG_RBRC: send_string("}" ); break;     // }
+            case NG_BSLS: send_string("|" ); break;
 
             case NG_A   : send_string("vu"); break;
             case NG_S   : send_string("zi"); break;
@@ -329,9 +309,9 @@ void nicola_om_type(void) {
             case NG_K   : send_string("no"); break;
             case NG_L   : send_string("xyo");break;
             case NG_SCLN: send_string("xtu");break;
-            case NG_QUOT   : send_string("zv"); send_string(SS_TAP(X_SPACE)); break;      // 
+            case NG_QUOT:                    break;
 
-            case NG_Z   : send_string("wye"); break;
+            case NG_Z   :                    break;
             case NG_X   : send_string("bi"); break;
             case NG_C   : send_string("zu"); break;
             case NG_V   : send_string("bu"); break;
@@ -347,7 +327,6 @@ void nicola_om_type(void) {
 
 // 親指シフトの入力処理
 bool process_nicola(uint16_t keycode, keyrecord_t *record) {
-
 
     if (n_modifier > 0) return true;
 

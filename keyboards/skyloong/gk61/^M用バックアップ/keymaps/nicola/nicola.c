@@ -348,7 +348,6 @@ void nicola_om_type(void) {
 // 親指シフトの入力処理
 bool process_nicola(uint16_t keycode, keyrecord_t *record) {
 
-
     if (n_modifier > 0) return true;
 
     key_process_guard = 1; // timeout entrance guard
