@@ -1,6 +1,11 @@
 // Copyright 2021 JZ-Skyloong (@JZ-Skyloong)
 // SPDX-License-Identifier: GPL-2.0-or-later
 // 西巻裕改造@2024
+//^Mがほぼ完全に動くようになったバージョン10be7391e7 西巻GK61_Ver4.M
+//
+//
+//
+
 
 #include QMK_KEYBOARD_H
 
@@ -85,6 +90,78 @@ bool led_update_kb(led_t led_state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
+
+    // ===== Ctrl編集キー =====
+
+    if (record->event.pressed) {
+
+        uint8_t mods = get_mods();
+        bool ctrl = mods & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL));
+
+        if (ctrl) {
+
+            switch (keycode) {
+
+                case KC_H:
+                case NG_H:
+                    unregister_mods(mods);
+                    tap_code(KC_BSPC);
+                    register_mods(mods);
+                    return false;
+
+                case KC_R:
+                case NG_R:
+                    unregister_mods(mods);
+                    tap_code(KC_PGUP);
+                    register_mods(mods);
+                    return false;
+
+                case KC_C:
+                case NG_C:
+                    unregister_mods(mods);
+                    tap_code(KC_PGDN);
+                    register_mods(mods);
+                    return false;
+
+                case KC_E:
+                case NG_E:
+                    unregister_mods(mods);
+                    tap_code(KC_UP);
+                    register_mods(mods);
+                    return false;
+
+                case KC_S:
+                case NG_S:
+                    unregister_mods(mods);
+                    tap_code(KC_LEFT);
+                    register_mods(mods);
+                    return false;
+
+                case KC_D:
+                case NG_D:
+                    unregister_mods(mods);
+                    tap_code(KC_RIGHT);
+                    register_mods(mods);
+                    return false;
+
+                case KC_X:
+                case NG_X:
+                    unregister_mods(mods);
+                    tap_code(KC_DOWN);
+                    register_mods(mods);
+                    return false;
+
+                case KC_I:
+                case NG_I:
+                    unregister_mods(mods);
+                    tap_code(KC_TAB);
+                    register_mods(mods);
+                    return false;
+            }
+        }
+    }
+
+    // ===== Ctrl編集キー ここまで =====
 
     switch (keycode) {
 
