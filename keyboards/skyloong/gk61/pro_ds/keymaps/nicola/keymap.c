@@ -2,19 +2,14 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // 西巻裕改造@2024
 //^Mがほぼ完全に動くようになったバージョン10be7391e7 西巻GK61_Ver4.M
-//
-//
-//
-
 
 #include QMK_KEYBOARD_H
-
 #include "nicola.h" // NICOLA親指シフト
 #include <timer.h>
 #include "rgb_config.h" // RGB LEDの定義
 
-// Ctrl+M対応：状態保持フラグ
-// static bool ctrl_m_pressed = false;
+// Ctrl編集モードフラグ（グローバル）
+static bool ctrl_edit_mode = true;
 
 // 各レイヤー名
 enum keymap_layers {
@@ -24,16 +19,10 @@ enum keymap_layers {
 };
 
 // カスタムキーコード
-// カスタムキーコード
 enum custom_keycodes {
     MY_M = NG_BOTTOM + 1,  // NG_* 系の最後に +1
     CTRL_TOGGLE
 };
-
-//enum custom_keycodes {
-//       MY_M = SAFE_RANGE  // ← NG_SAFE_RANGE → SAFE_RANGE に変更
-//    MY_M = NG_SAFE_RANGE  // NICOLAで使うSafe Rangeが定義されているのでこちらを使用
-//};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -58,15 +47,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,  QK_RGB_MATRIX_TOGGLE, _______, KC_UP, _______,  _______,  _______, KC_PSCR, _______, _______,  _______, _______, _______, _______,
         KC_LCTL, _______,  KC_LEFT,  KC_RIGHT,  _______,   _______,   _______,  _______,  KC_HOME,  KC_END,   _______,  _______,            _______,
         _______,      _______,  KC_DOWN,  _______,  _______,   _______,   _______,  _______,  KC_PGUP,  KC_PGDN,   KC_SLSH,            KC_RSFT,
-        KC_PSCR,      _______,  _______,     KC_DEL,    _______,       KC_ESC,   _______,   KC_LNG1,  KC_CAPS_LOCK,             KC_RCTL
+        KC_PSCR,      _______,  _______,     KC_DEL,    _______,       KC_ESC,   _______,   KC_LNG1,  KC_CAPS_LOCK,             CTRL_TOGGLE
     )
 };
 
-
-//CapsLockをFn+下矢印に移した
-// Fn+左カーソルでローマ字日本語入力になる
-// Fn+Q：照明のONOFF・Fn+Capslock：Capslock
-
+// -------------------- 初期化 --------------------
 void matrix_init_user(void) {
     set_nicola(_NICOLA); // NICOLA親指シフト初期化
 }
@@ -88,78 +73,24 @@ bool led_update_kb(led_t led_state) {
 }
 #endif
 
-
+// -------------------- キー入力処理 --------------------
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
+    uint8_t mods = get_mods();
+    bool ctrl = mods & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL));
 
-    // ===== Ctrl編集キー =====
-
-    if (record->event.pressed) {
-
-        uint8_t mods = get_mods();
-        bool ctrl = mods & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL));
-
-        if (ctrl) {
-
-            switch (keycode) {
-
-                case KC_H:
-                case NG_H:
-                    unregister_mods(mods);
-                    tap_code(KC_BSPC);
-                    register_mods(mods);
-                    return false;
-
-                case KC_M:
-                case NG_M:
-                    unregister_mods(mods);
-                    tap_code(KC_ENT);
-                    register_mods(mods);
-                    return false;
-
-                case KC_E:
-                case NG_E:
-                    unregister_mods(mods);
-                    tap_code(KC_UP);
-                    register_mods(mods);
-                    return false;
-
-                case KC_S:
-                case NG_S:
-                    unregister_mods(mods);
-                    tap_code(KC_LEFT);
-                    register_mods(mods);
-                    return false;
-
-                case KC_D:
-                case NG_D:
-                    unregister_mods(mods);
-                    tap_code(KC_RIGHT);
-                    register_mods(mods);
-                    return false;
-
-                case KC_X:
-                case NG_X:
-                    unregister_mods(mods);
-                    tap_code(KC_DOWN);
-                    register_mods(mods);
-                    return false;
-
-                case KC_I:
-                case NG_I:
-                    unregister_mods(mods);
-                    tap_code(KC_TAB);
-                    register_mods(mods);
-                    return false;
-            }
-        }
-    }
-
-    // ===== Ctrl編集キー ここまで =====
-
+    // ----------------- switch 文開始 -----------------
     switch (keycode) {
 
-        case KC_PSCR:  // 英数キー(Caps Lock相当)
+        // Ctrlモードトグルスイッチ
+        case CTRL_TOGGLE:
+            if (record->event.pressed) {
+                ctrl_edit_mode = !ctrl_edit_mode;
+            }
+            return false;
+
+        // 英数キー
+        case KC_PSCR:
             if (record->event.pressed) {
                 send_string(SS_TAP(X_LNG2));
 #ifndef USE_OBSERVE_IME
@@ -168,71 +99,83 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
-        case KC_F14:   // NICOLAモード切替
+        // NICOLAモード切替
+        case KC_F14:
             if (record->event.pressed) {
-                send_string(SS_TAP(X_LNG1)); // Mac
+                send_string(SS_TAP(X_LNG1));
 #ifndef USE_OBSERVE_IME
                 nicola_on();
 #endif
             }
             return false;
 
-        // ======== ここから Ctrl+M のカスタム処理 ========
+        // MY_M（親指シフト含む Ctrl+M）
+        case MY_M: {
+            bool is_nicola = nicola_state();
+            bool shift = mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
 
-case MY_M: {
-    bool is_nicola = nicola_state();
+            if (record->event.pressed) {
+                if (ctrl && ctrl_edit_mode) {
+                    unregister_mods(mods);
+                    tap_code(KC_ENT);
+                    register_mods(mods);
+                    return false;
+                }
+                if (!is_nicola || shift) {
+                    tap_code(KC_M);
+                    return false;
+                }
+            }
 
-    if (record->event.pressed) {
-
-        uint8_t mods = get_mods();
-        bool ctrl = mods & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL));
-        bool shift = mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
-
-        // Ctrl+M → Enter
-        if (ctrl) {
-            unregister_mods(mods);
-            tap_code(KC_ENT);
-            register_mods(mods);
+            if (is_nicola) {
+                process_nicola(NG_M, record);
+            }
             return false;
         }
 
-        // NICOLAでない or Shiftあり → 普通のM
-        if (!is_nicola || shift) {
-            tap_code(KC_M);
-            return false;
-        }
+        // Ctrl編集モード ON のときのみ特殊キー横取り
+        case KC_H: case NG_H:
+        case KC_E: case NG_E:
+        case KC_S: case NG_S:
+        case KC_D: case NG_D:
+        case KC_X: case NG_X:
+        case KC_I: case NG_I:
+            if (record->event.pressed && ctrl && ctrl_edit_mode) {
+                unregister_mods(mods);
+                switch (keycode) {
+                    case KC_H: case NG_H: tap_code(KC_BSPC); break;
+                    case KC_E: case NG_E: tap_code(KC_UP); break;
+                    case KC_S: case NG_S: tap_code(KC_LEFT); break;
+                    case KC_D: case NG_D: tap_code(KC_RIGHT); break;
+                    case KC_X: case NG_X: tap_code(KC_DOWN); break;
+                    case KC_I: case NG_I: tap_code(KC_TAB); break;
+                }
+                register_mods(mods);
+                return false;
+            }
+            break;
+
+        // ここに他のキー追加可能
     }
 
-    // NICOLA処理（押し／離し両方）
-    if (is_nicola) {
-        process_nicola(NG_M, record);
-    }
-
-    return false;
-}
-
-
-        // ======== Ctrl+M の処理ここまで ========
-
-    }
-
+    // ----------------- 親指シフト処理 -----------------
     bool a = true;
     if (nicola_state()) {
         nicola_mode(keycode, record);
         a = process_nicola(keycode, record);
     }
 
-    if (a == false) return false;
-
+    if (!a) return false;
     return true;
 }
 
-
+// -------------------- NICOLA状態マシン駆動 --------------------
 void matrix_scan_user(void) {
     uint32_t now = timer_read32();
-    timer_tick(now); // NICOLA状態マシン駆動
+    timer_tick(now);
 }
 
+// -------------------- RGB LEDインジケータ --------------------
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     for (uint8_t i = led_min; i < led_max; i++)
@@ -261,5 +204,11 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 255, 255, 0);
             break;
     }
+
+    // ★ここを追加★
+    if (ctrl_edit_mode) {
+        RGB_MATRIX_INDICATOR_SET_COLOR(OYA_RIGHT_INDEX, 255, 0, 0); // 赤
+    }
+
     return false;
 }
