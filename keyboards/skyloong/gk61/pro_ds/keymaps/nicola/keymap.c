@@ -26,7 +26,8 @@ enum keymap_layers {
 // カスタムキーコード
 // カスタムキーコード
 enum custom_keycodes {
-    MY_M = NG_0 + 1
+    MY_M = NG_BOTTOM + 1,  // NG_* 系の最後に +1
+    CTRL_TOGGLE
 };
 
 //enum custom_keycodes {
