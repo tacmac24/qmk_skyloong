@@ -39,7 +39,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,    NG_Q,   NG_W,  NG_E,   NG_R,   NG_T,      NG_Y,     NG_U,     NG_I,     NG_O,      NG_P,     NG_LBRC,  NG_RBRC,  NG_BSLS,
         KC_LCTL,  NG_A,   NG_S,   NG_D,   NG_F,   NG_G,      NG_H,     NG_J,     NG_K,     NG_L,      NG_SCLN,  NG_QUOT,            KC_ENT,
         KC_LSFT,   NG_Z,   NG_X,   NG_C,   NG_V,   NG_B,      NG_N,     MY_M,     NG_COMM,  NG_DOT,    NG_SLSH,            KC_UP,
-        KC_PSCR,      KC_LGUI,  KC_LALT,     NG_SHFTL,  _______,       NG_SHFTR, MO(_FUNC), KC_LEFT,  KC_DOWN,            KC_RIGHT
+        KC_PSCR,  KC_LALT,  KC_LGUI,    NG_SHFTL,  _______,       NG_SHFTR, MO(_FUNC), KC_LEFT,  KC_DOWN,            KC_RIGHT
     ),
 
     [_FUNC] = LAYOUT_all(
@@ -183,31 +183,33 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-            RGB_MATRIX_INDICATOR_SET_COLOR(CAPS_LOCK_INDEX, 255, 255, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 0, 63, 0);
+            RGB_MATRIX_INDICATOR_SET_COLOR(CAPS_LOCK_INDEX, 0, 63, 0); // 
+            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 0, 63, 0); // 
             break;
         case _NICOLA:
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 255, 255, 0);
+            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 127, 127, 0);
             RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 127, 127, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_RIGHT_INDEX, 255, 255, 0);
+            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_RIGHT_INDEX, 127, 127, 0);
             break;
         case _FUNC:
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 255, 0, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_BS_INDEX, 255, 0, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PS_INDEX, 0, 0, 255);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_HOME_INDEX, 0, 0, 255);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PU_INDEX, 0, 0, 255);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PD_INDEX, 0, 0, 255);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_UP_INDEX, 255, 255, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 255, 255, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 255, 255, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 255, 255, 0);
+            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 255, 0, 0); // 赤
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_BS_INDEX, 255, 0, 0);  // 赤
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PS_INDEX, 0, 0, 255); // 青
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_HOME_INDEX, 0, 0, 255); // 青
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PU_INDEX, 0, 0, 255); // 青
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PD_INDEX, 0, 0, 255); // 青
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_UP_INDEX, 255, 255, 0); // 黄（実は緑）
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 255, 0, 0);// 赤
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 255, 0, 0);// 赤
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 255, 0, 0);// 赤
             break;
     }
 
     // ★ここを追加★
     if (ctrl_edit_mode) {
-        RGB_MATRIX_INDICATOR_SET_COLOR(OYA_RIGHT_INDEX, 255, 0, 0); // 赤
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 255, 255, 0);// 黄（実は緑）
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 255, 255, 0);// 黄（実は緑）
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 255, 255, 0);// 黄（実は緑）
     }
 
     return false;
