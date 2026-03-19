@@ -135,6 +135,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         // Ctrl編集モード ON のときのみ特殊キー横取り
         case KC_H: case NG_H:
+        case KC_G: case NG_D:
         case KC_E: case NG_E:
         case KC_S: case NG_S:
         case KC_D: case NG_D:
@@ -144,6 +145,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_mods(mods);
                 switch (keycode) {
                     case KC_H: case NG_H: tap_code(KC_BSPC); break;
+                    case KC_G: case NG_D: tap_code(KC_DEL); break;
                     case KC_E: case NG_E: tap_code(KC_UP); break;
                     case KC_S: case NG_S: tap_code(KC_LEFT); break;
                     case KC_D: case NG_D: tap_code(KC_RIGHT); break;
