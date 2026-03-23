@@ -30,7 +30,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC,    KC_1,   KC_2,    KC_3,     KC_4,     KC_5,      KC_6,     KC_7,    KC_8,    KC_9,      KC_0,     KC_MINS,  KC_EQL,   KC_BSPC,
         KC_TAB,    KC_Q,   KC_W,   KC_E,     KC_R,     KC_T,    KC_Y,     KC_U,    KC_I,     KC_O,      KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS,
         KC_LCTL,   KC_A,   KC_S,    KC_D,     KC_F,     KC_G,    KC_H,     KC_J,    KC_K,    KC_L,      KC_SCLN,  KC_QUOT,            KC_ENT,
-        KC_LSFT,   KC_Z,   KC_X,    KC_C,     KC_V,     KC_B,     KC_N,     MY_M,    KC_COMM,  KC_DOT,            KC_RSFT,    KC_UP,
+        KC_LSFT,   KC_Z,   KC_X,    KC_C,     KC_V,     KC_B,     KC_N,     MY_M,    KC_COMM,  KC_DOT,       KC_SLSH,    KC_UP,
         KC_PSCR,  KC_LALT, KC_LGUI,      KC_SPC,  _______,KC_F14,   MO(_FUNC), KC_LEFT,  KC_DOWN,            KC_RIGHT
     ),
 
@@ -46,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV,  KC_F1,  KC_F2,    KC_F3,    KC_F4,     KC_F5,     KC_F6,    KC_F7,    KC_F8,    KC_F9,     KC_F10,   KC_F11,   KC_F12,   KC_DEL,
         _______,  QK_RGB_MATRIX_TOGGLE, _______, KC_UP, _______,  _______,  _______, KC_PSCR, _______, _______,  _______, _______, _______, _______,
         KC_LCTL, _______,  KC_LEFT,  KC_RIGHT,  _______,   _______,   _______,  _______,  KC_HOME,  KC_END,   _______,  _______,            _______,
-        _______,      _______,  KC_DOWN,  _______,  _______,   _______,   _______,  _______,  KC_PGUP,  KC_PGDN,   KC_SLSH,            KC_RSFT,
+        _______,      _______,  KC_DOWN,  _______,  _______,   _______,   _______,  _______,  KC_PGUP,  KC_PGDN,   _______,     KC_RSFT,    
         KC_PSCR,      _______,  _______,     KC_DEL,    _______,       KC_ESC,   _______,   KC_LNG1,  KC_CAPS_LOCK,             CTRL_TOGGLE
     )
 };
@@ -135,6 +135,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         // Ctrl編集モード ON のときのみ特殊キー横取り
         case KC_H: case NG_H:
+        case KC_G: case NG_G:
         case KC_E: case NG_E:
         case KC_S: case NG_S:
         case KC_D: case NG_D:
@@ -144,6 +145,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_mods(mods);
                 switch (keycode) {
                     case KC_H: case NG_H: tap_code(KC_BSPC); break;
+                    case KC_G: case NG_G: tap_code(KC_DEL); break;
                     case KC_E: case NG_E: tap_code(KC_UP); break;
                     case KC_S: case NG_S: tap_code(KC_LEFT); break;
                     case KC_D: case NG_D: tap_code(KC_RIGHT); break;
@@ -181,15 +183,23 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     for (uint8_t i = led_min; i < led_max; i++)
         RGB_MATRIX_INDICATOR_SET_COLOR(i, 0, 0, 0);
 
+        // 255.255.255：白
+        // 255.255.0：黄
+        // 255.0.0：赤
+        // 0.255.0：緑
+        // 0.255.255：水色
+        // 255.0.255：ピンク
+        // 0, 0, 255   : 青
+
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-            RGB_MATRIX_INDICATOR_SET_COLOR(CAPS_LOCK_INDEX, 0, 63, 0); // 
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 0, 63, 0); // 
+            RGB_MATRIX_INDICATOR_SET_COLOR(0, 255, 0, 255); // ピンクのエスケープ
+            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 0, 255, 0); // 
             break;
         case _NICOLA:
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 127, 127, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 127, 127, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_RIGHT_INDEX, 127, 127, 0);
+            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 0, 0, 255);
+            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 0, 0, 255);
+            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_RIGHT_INDEX, 0, 0, 255);
             break;
         case _FUNC:
             RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 255, 0, 0); // 赤
@@ -205,11 +215,15 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             break;
     }
 
-    // ★ここを追加★
     if (ctrl_edit_mode) {
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 255, 255, 0);// 黄（実は緑）
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 255, 255, 0);// 黄（実は緑）
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 255, 255, 0);// 黄（実は緑）
+            RGB_MATRIX_INDICATOR_SET_COLOR(27, 255, 0, 255); // ピンク＼
+            RGB_MATRIX_INDICATOR_SET_COLOR(17, 0, 0, 255); // 青
+            RGB_MATRIX_INDICATOR_SET_COLOR(30, 0, 0, 255); // 青
+            RGB_MATRIX_INDICATOR_SET_COLOR(31, 0, 0, 255); // 青
+            RGB_MATRIX_INDICATOR_SET_COLOR(43, 0, 0, 255); // 青
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 0, 255, 0);
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 0, 255, 0);
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 0, 255, 0);
     }
 
     return false;
