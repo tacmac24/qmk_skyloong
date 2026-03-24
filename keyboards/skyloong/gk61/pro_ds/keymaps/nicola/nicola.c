@@ -238,7 +238,7 @@ void nicola_om_type(void) {
             case NG_7   : send_string("zf"); send_string(SS_TAP(X_SPACE)); break; 
             case NG_8   : send_string("zm"); send_string(SS_TAP(X_SPACE)); break; 
             case NG_9   : send_string("zy"); send_string(SS_TAP(X_SPACE)); break; 
-            case NG_0   : send_string("qp"); send_string(SS_TAP(X_SPACE)); break; 
+            case NG_0:  tap_code16(S(KC_ENT)); break; // Shift+Enter
             case NG_MINS   : send_string("xq"); send_string(SS_TAP(X_SPACE)); break; 
             case NG_EQL   : send_string("xw"); send_string(SS_TAP(X_SPACE)); break; 
 
@@ -286,7 +286,7 @@ void nicola_om_type(void) {
             case NG_2   : send_string("/"); send_string(SS_TAP(X_F9)); break;      // ／・
             case NG_3: tap_code(KC_ENT); break;  // 
             case NG_4   : send_string("zd"); send_string(SS_TAP(X_SPACE)); break; 
-            case NG_5:  tap_code16(S(KC_ENT)); break; // Shift+Enter
+            case NG_5   : send_string("qp"); send_string(SS_TAP(X_SPACE)); break; 
 
             case NG_6   : send_string("{"); break;      // 『
             case NG_7   : send_string("}"); break;      // 』
