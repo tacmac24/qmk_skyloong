@@ -186,7 +186,7 @@ void nicola_m_type(void) {
             case NG_L   : send_string("i" ); break;
             case NG_SCLN: send_string("nn"); break;
 //            case NG_QUOT:                  ; break;         
-            case NG_QUOT: tap_code(KC_BSPC); break;  // 古賀さん用、バックスペース
+		  case NG_QUOT: tap_code(KC_ENT); break;  // リターン
 
             case NG_Z   : send_string("."); send_string(SS_TAP(X_F9)); break;      // ／
            //ピリオドと句点は区別できないはずだが、区別できるようになった
@@ -198,8 +198,8 @@ void nicola_m_type(void) {
             case NG_M   : send_string("so"); break;
             case NG_COMM: send_string("ne"); break;
             case NG_DOT : send_string("ho"); break;
-            case NG_SLSH: send_string("/"); break;  // 
- //            case NG_SLSH   : send_string("zx"); send_string(SS_TAP(X_SPACE)); break;      // 
+		  case NG_SLSH: send_string("/"); break;
+//            case NG_SLSH   : send_string("zx"); send_string(SS_TAP(X_SPACE)); break;      // 
         }
     }
 }
