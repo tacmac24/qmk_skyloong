@@ -177,12 +177,12 @@ void matrix_scan_user(void) {
     timer_tick(now);
 }
 
-// -------------------- RGB LEDインジケータ --------------------
-
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    for (uint8_t i = led_min; i < led_max; i++)
+    // -------------------- RGB LEDインジケータ --------------------
+    
+    bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+                                                                                for (uint8_t i = led_min; i < led_max; i++)
         RGB_MATRIX_INDICATOR_SET_COLOR(i, 0, 0, 0);
-
+        
         // 255.255.255：白
         // 255.255.0：黄
         // 255.0.0：赤
@@ -190,41 +190,42 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         // 0.255.255：水色
         // 255.0.255：ピンク
         // 0, 0, 255   : 青
-
-    switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
-            RGB_MATRIX_INDICATOR_SET_COLOR(0, 255, 0, 255); // ピンクのエスケープ
+        
+        switch (get_highest_layer(layer_state)) {
+          case _QWERTY:
+//        RGB_MATRIX_INDICATOR_SET_COLOR(0, 255, 0, 255); // ピンクのエスケープ
             RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 0, 255, 0); // 
             break;
-        case _NICOLA:
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 0, 0, 255);
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_CENTER_INDEX, 0, 0, 255);
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_RIGHT_INDEX, 0, 0, 255);
+          case _NICOLA:
+//         RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 0, 0, 255);
+            RGB_MATRIX_INDICATOR_SET_COLOR(56, 0, 0, 255);
+//         RGB_MATRIX_INDICATOR_SET_COLOR(OYA_RIGHT_INDEX, 0, 0, 255);
             break;
-        case _FUNC:
-            RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 255, 0, 0); // 赤
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_BS_INDEX, 255, 0, 0);  // 赤
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PS_INDEX, 0, 0, 255); // 青
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_HOME_INDEX, 0, 0, 255); // 青
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PU_INDEX, 0, 0, 255); // 青
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_PD_INDEX, 0, 0, 255); // 青
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_UP_INDEX, 255, 255, 0); // 黄（実は緑）
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 255, 0, 0);// 赤
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 255, 0, 0);// 赤
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 255, 0, 0);// 赤
+          case _FUNC:
+//         RGB_MATRIX_INDICATOR_SET_COLOR(OYA_LEFT_INDEX, 255, 0, 0); // 赤
+//         RGB_MATRIX_INDICATOR_SET_COLOR(FN_BS_INDEX, 255, 0, 0);  // 赤
+           RGB_MATRIX_INDICATOR_SET_COLOR(56, 255, 0, 0);
+//        RGB_MATRIX_INDICATOR_SET_COLOR(FN_PS_INDEX, 0, 0, 255); // 青
+//        RGB_MATRIX_INDICATOR_SET_COLOR(FN_HOME_INDEX, 0, 0, 255); // 青
+//        RGB_MATRIX_INDICATOR_SET_COLOR(FN_PU_INDEX, 0, 0, 255); // 青
+//        RGB_MATRIX_INDICATOR_SET_COLOR(FN_PD_INDEX, 0, 0, 255); // 青
+//         RGB_MATRIX_INDICATOR_SET_COLOR(FN_UP_INDEX, 255, 255, 0); // 黄（実は緑）
+//         RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 255, 0, 0);// 赤
+//         RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 255, 0, 0);// 赤
+//         RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 255, 0, 0);// 赤
             break;
+        }
+        
+        if (ctrl_edit_mode) {
+//         RGB_MATRIX_INDICATOR_SET_COLOR(27, 255, 0, 255); // ピンク
+//         RGB_MATRIX_INDICATOR_SET_COLOR(17, 0, 0, 255); // 青
+//         RGB_MATRIX_INDICATOR_SET_COLOR(30, 0, 0, 255); // 青
+//         RGB_MATRIX_INDICATOR_SET_COLOR(31, 0, 0, 255); // 青
+//         RGB_MATRIX_INDICATOR_SET_COLOR(43, 0, 0, 255); // 青
+//         RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 0, 255, 0);
+//         RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 0, 255, 0);
+            RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 255, 0, 255);
+        }
+        
+        return false;
     }
-
-    if (ctrl_edit_mode) {
-            RGB_MATRIX_INDICATOR_SET_COLOR(27, 255, 0, 255); // ピンク＼
-            RGB_MATRIX_INDICATOR_SET_COLOR(17, 0, 0, 255); // 青
-            RGB_MATRIX_INDICATOR_SET_COLOR(30, 0, 0, 255); // 青
-            RGB_MATRIX_INDICATOR_SET_COLOR(31, 0, 0, 255); // 青
-            RGB_MATRIX_INDICATOR_SET_COLOR(43, 0, 0, 255); // 青
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_LEFT_INDEX, 0, 255, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_DOWN_INDEX, 0, 255, 0);
-            RGB_MATRIX_INDICATOR_SET_COLOR(FN_RIGHT_INDEX, 0, 255, 0);
-    }
-
-    return false;
-}
